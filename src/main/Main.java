@@ -2,6 +2,8 @@ package main;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import javax.imageio.ImageIO;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,6 +15,15 @@ public class Main {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
+
+        System.out.println("Loading assets...");
+        System.out.println(Constants.IMG_PATH + "logo.png");
+        try {
+            frame.setIconImage(ImageIO.read(new File(Constants.IMG_PATH + "logo.png")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         frame.setVisible(true);
 
         //recentre la fenetre

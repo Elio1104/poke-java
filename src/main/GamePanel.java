@@ -19,7 +19,7 @@ public class GamePanel extends JPanel implements KeyListener{
     public GamePanel() {
         this.map = new Map();
         this.player = new Player(map.getPlayerX(), map.getPlayerY());
-        map.deleteCell(player.getX(), player.getY());
+        map.deleteCell((int)player.getX(), (int)player.getY());
 
         paddingX = (int) Math.ceil((((double)(Constants.WIDTH - Constants.IMG_PIXEL_SIZE) / 2) / Constants.IMG_PIXEL_SIZE));
         paddingY = (int) Math.ceil((((double)(Constants.HEIGHT - Constants.IMG_PIXEL_SIZE) / 2) / Constants.IMG_PIXEL_SIZE));
@@ -36,13 +36,13 @@ public class GamePanel extends JPanel implements KeyListener{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        for(int x = player.getX() - paddingX; x <= player.getX() + paddingX; x++) {
-            for(int y = player.getY() - paddingY; y <= player.getY() + paddingY; y++) {
-                int posX = playerPosPixelX - Constants.IMG_PIXEL_SIZE * (player.getX() - x);
-                int posY = playerPosPixelY - Constants.IMG_PIXEL_SIZE * (player.getY() - y);
+        for(double x = (int)player.getX() - paddingX; x <= player.getX() + 1 + paddingX; x++) {
+            for(double y = (int)player.getY() - paddingY; y <= player.getY() + 1 + paddingY; y++) {
+                int posX = (int)((double)playerPosPixelX - ((double)Constants.IMG_PIXEL_SIZE * (player.getX() - x)));
+                int posY = (int)((double)playerPosPixelY - ((double)Constants.IMG_PIXEL_SIZE * (player.getY() - y)));
                 g.drawImage(map.getGrass(), posX, posY, this);
                 if (!(x < 0 || y < 0 || x >= map.getWidth() || y >= map.getHeight()))
-                    g.drawImage(map.getTile(x,y), posX, posY, this);
+                    g.drawImage(map.getTile((int)x, (int)y), posX, posY, this);
             }
         }
 
@@ -50,31 +50,52 @@ public class GamePanel extends JPanel implements KeyListener{
     }
 
     private void movePlayer(int dx, int dy) {
-        int newY = player.getY() + dy;
-        int newX = player.getX() + dx;
+        if (player.isMoving()) return;
 
-        System.out.println("New position: " + newX + ", " + newY);
+        double newY = (int)player.getY() + dy;
+        double newX = (int)player.getX() + dx;
+
         // Vérifie si la nouvelle position est dans les limites et si ce n'est pas un mur
-        if (newX >= 0 && newX < map.getWidth() && newY >= 0 && newY < map.getHeight() && map.getCell(newX, newY) != '1') {
-            if (map.getCell(newX, newY) == 'V') {
+        if (newX >= 0 && newX < map.getWidth() && newY >= 0 && newY < map.getHeight() && map.getCell((int)newX, (int)newY) != '1') {
+            if (map.getCell((int)newX, (int)newY) == 'V') {
                 System.out.println("You lose!");
                 System.exit(0);
             }
-            else if (map.getCell(newX, newY) == 'E') {
+            else if (map.getCell((int)newX, (int)newY) == 'E') {
                 if (map.checkCollectible()) {
                     System.out.println("You win!");
                     System.exit(0);
                 }
             }
             else {
-                if (map.getCell(newX, newY) == 'C') {
-                    map.deleteCell(newX, newY);
+                if (map.getCell((int)newX, (int)newY) == 'C') {
+                    map.deleteCell((int)newX, (int)newY);
                     player.addItem();
                 }
-                player.setX(newX);
-                player.setY(newY);
+
+                player.swapMoving();
+
+                Timer timer = new Timer(16, e -> {
+                    if (player.getX() != newX || player.getY() != newY) {
+                        if (dx == -1)
+                            player.setX(Math.max(player.getX() - ((double) player.getSpeed() / Constants.IMG_PIXEL_SIZE), newX));
+                        if (dx == 1)
+                            player.setX(Math.min(player.getX() + ((double) player.getSpeed() / Constants.IMG_PIXEL_SIZE), newX));
+                        if (dy == -1)
+                            player.setY(Math.max(player.getY() - ((double) player.getSpeed() / Constants.IMG_PIXEL_SIZE), newY));
+                        if (dy == 1)
+                            player.setY(Math.min(player.getY() + ((double) player.getSpeed() / Constants.IMG_PIXEL_SIZE), newY));
+                        repaint(); // Met à jour l'affichage
+                    } else {
+                        // Fin de l'animation
+                        player.setX(newX);
+                        player.setY(newY);
+                        ((Timer) e.getSource()).stop();
+                        player.swapMoving();
+                    }
+                });
+                timer.start();
             }
-            repaint();
         }
     }
 

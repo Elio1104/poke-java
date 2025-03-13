@@ -4,12 +4,14 @@ import main.Constants.Status;
 import java.awt.*;
 
 public class Player {
-    PlayerAssets assets;
-    int x, y;
-    int speed;
-    int item;
+    private boolean isMoving;
+    private final PlayerAssets assets;
+    private double x, y;
+    private final int speed;
+    private int item;
 
     public Player(int x, int y) {
+        this.isMoving = false;
         this.x = x;
         this.y = y;
         this.speed = 8;
@@ -17,17 +19,17 @@ public class Player {
         this.assets = new PlayerAssets();
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
@@ -37,5 +39,16 @@ public class Player {
 
     public Image getSprite(Status status, int frame){
         return (assets.getSprite(status, frame));
+    }
+
+    public boolean isMoving() {
+        return isMoving;
+    }
+    public void swapMoving() {
+        isMoving = !isMoving;
+    }
+
+    public int getSpeed() {
+        return speed;
     }
 }
