@@ -86,4 +86,23 @@ public class Map {
     public Image getGrass() {
         return assets.getTile('0');
     }
+
+    public void deleteCell(int x, int y) {
+        grid[x][y] = '0';
+    }
+
+    public char getCell(int x, int y) {
+    	return grid[x][y];
+    }
+
+    public boolean checkCollectible() {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (grid[x][y] == 'C') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
