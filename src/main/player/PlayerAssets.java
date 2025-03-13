@@ -34,9 +34,9 @@ public class PlayerAssets {
                     ImageIO.read(new File(Constants.SPRITE_PLAYER_PATH + "Dawn_left3.png"))
             });
             sprites.put(Status.RIGHT, new Image[]{
-                    ImageIO.read(new File(Constants.SPRITE_PLAYER_PATH + "Dawn_left1.png")),
-                    ImageIO.read(new File(Constants.SPRITE_PLAYER_PATH + "Dawn_left2.png")),
-                    ImageIO.read(new File(Constants.SPRITE_PLAYER_PATH + "Dawn_left3.png"))
+                    ImageIO.read(new File(Constants.SPRITE_PLAYER_PATH + "Dawn_right1.png")),
+                    ImageIO.read(new File(Constants.SPRITE_PLAYER_PATH + "Dawn_right2.png")),
+                    ImageIO.read(new File(Constants.SPRITE_PLAYER_PATH + "Dawn_right3.png"))
             });
         } catch (Exception e) {
             e.printStackTrace();

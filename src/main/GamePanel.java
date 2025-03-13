@@ -45,8 +45,8 @@ public class GamePanel extends JPanel implements KeyListener{
                     g.drawImage(map.getTile((int)x, (int)y), posX, posY, this);
             }
         }
-
-        g.drawImage(player.getSprite(Status.DOWN, 1), playerPosPixelX, playerPosPixelY, this);
+        System.out.println("end : " + player.getFrame());
+        g.drawImage(player.getSprite(), playerPosPixelX, playerPosPixelY, this);
     }
 
     private void movePlayer(int dx, int dy) {
@@ -74,9 +74,14 @@ public class GamePanel extends JPanel implements KeyListener{
                 }
 
                 player.swapMoving();
+                player.nextFrame();
 
                 Timer timer = new Timer(16, e -> {
                     if (player.getX() != newX || player.getY() != newY) {
+                        if (Math.abs(player.getX() - newX) <= 0.5 && Math.abs(player.getY() - newY) <= 0.5 && player.getFrame() != 3) {
+                            System.out.println("diff x : " + Math.abs(player.getX() - newX) + " diff y : " + Math.abs(player.getY() - newY));
+                            player.nextFrame();
+                        }
                         if (dx == -1)
                             player.setX(Math.max(player.getX() - ((double) player.getSpeed() / Constants.IMG_PIXEL_SIZE), newX));
                         if (dx == 1)
@@ -85,6 +90,8 @@ public class GamePanel extends JPanel implements KeyListener{
                             player.setY(Math.max(player.getY() - ((double) player.getSpeed() / Constants.IMG_PIXEL_SIZE), newY));
                         if (dy == 1)
                             player.setY(Math.min(player.getY() + ((double) player.getSpeed() / Constants.IMG_PIXEL_SIZE), newY));
+                        if (player.getFrame() == 3 && player.getX() == newX && player.getY() == newY)
+                            player.nextFrame();
                         repaint(); // Met à jour l'affichage
                     } else {
                         // Fin de l'animation
@@ -102,16 +109,24 @@ public class GamePanel extends JPanel implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
+            case KeyEvent.VK_Q:
             case KeyEvent.VK_LEFT:
+                player.setStatus(Status.LEFT);
                 movePlayer(-1, 0); // Déplacement à gauche
                 break;
+            case KeyEvent.VK_D:
             case KeyEvent.VK_RIGHT:
+                player.setStatus(Status.RIGHT);
                 movePlayer(1, 0); // Déplacement à droite
                 break;
             case KeyEvent.VK_UP:
+            case KeyEvent.VK_Z:
+                player.setStatus(Status.UP);
                 movePlayer(0, -1); // Déplacement vers le haut
                 break;
             case KeyEvent.VK_DOWN:
+            case KeyEvent.VK_S:
+                player.setStatus(Status.DOWN);
                 movePlayer(0, 1); // Déplacement vers le bas
                 break;
         }

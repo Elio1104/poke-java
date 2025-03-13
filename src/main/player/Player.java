@@ -9,6 +9,8 @@ public class Player {
     private double x, y;
     private final int speed;
     private int item;
+    private Status status;
+    private int frame;
 
     public Player(int x, int y) {
         this.isMoving = false;
@@ -17,6 +19,8 @@ public class Player {
         this.speed = 8;
         this.item = 0;
         this.assets = new PlayerAssets();
+        this.status = Status.DOWN;
+        this.frame = 1;
     }
 
     public double getX() {
@@ -37,7 +41,7 @@ public class Player {
         this.item++;
     }
 
-    public Image getSprite(Status status, int frame){
+    public Image getSprite(){
         return (assets.getSprite(status, frame));
     }
 
@@ -50,5 +54,20 @@ public class Player {
 
     public int getSpeed() {
         return speed;
+    }
+
+    public int getFrame() {
+        return frame;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void nextFrame() {
+        frame++;
+        if(frame > 3) {
+            frame = 1;
+        }
     }
 }
