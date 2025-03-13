@@ -4,11 +4,11 @@ public final class Constants {
     private Constants() {}
 
     public enum Status {
-        UP, DOWN, LEFT, RIGHT;
+        UP, DOWN, LEFT, RIGHT
     }
 
-    public static final int WIDTH = 200;
-    public static final int HEIGHT = 200;
+    public static final int WIDTH = 1000;
+    public static final int HEIGHT = 700;
     public static final int IMG_PIXEL_SIZE = 64;
 
     public static final String TITLE = "Poke Java";

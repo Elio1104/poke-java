@@ -8,10 +8,11 @@ import main.Constants;
 
 public class Map {
     private char[][] grid;
-    private MapAssets assets;
+    private final MapAssets assets;
     private int width, height;
 
     public Map() {
+        assets = new MapAssets();
         loadMap();
     }
 
@@ -80,5 +81,9 @@ public class Map {
 
     public Image getTile(int x, int y) {
         return assets.getTile(grid[x][y]);
+    }
+
+    public Image getGrass() {
+        return assets.getTile('0');
     }
 }

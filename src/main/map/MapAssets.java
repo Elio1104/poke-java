@@ -18,7 +18,7 @@ public class MapAssets {
 
     private void loadImages() {
         try {
-            tiles.put('0', ImageIO.read(new File(Constants.SPRITE_MAP_PATH + "grass.png")));
+            tiles.put('0', ImageIO.read(new File(Constants.SPRITE_MAP_PATH + "Grass.png")));
             tiles.put('1', ImageIO.read(new File(Constants.SPRITE_MAP_PATH + "Tree.png")));
             tiles.put('C', ImageIO.read(new File(Constants.SPRITE_MAP_PATH + "pokeball.png")));
             tiles.put('E', ImageIO.read(new File(Constants.SPRITE_MAP_PATH + "exit.png")));
