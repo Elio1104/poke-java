@@ -40,12 +40,11 @@ public class GamePanel extends JPanel implements KeyListener{
             for(double y = (int)player.getY() - paddingY; y <= player.getY() + 1 + paddingY; y++) {
                 int posX = (int)((double)playerPosPixelX - ((double)Constants.IMG_PIXEL_SIZE * (player.getX() - x)));
                 int posY = (int)((double)playerPosPixelY - ((double)Constants.IMG_PIXEL_SIZE * (player.getY() - y)));
-                g.drawImage(map.getGrass(), posX, posY, this);
+                g.drawImage(map.getGrass(), posX, posY + player.getHeight(), this);
                 if (!(x < 0 || y < 0 || x >= map.getWidth() || y >= map.getHeight()))
-                    g.drawImage(map.getTile((int)x, (int)y), posX, posY, this);
+                    g.drawImage(map.getTile((int)x, (int)y), posX, posY + player.getHeight(), this);
             }
         }
-        System.out.println("end : " + player.getFrame());
         g.drawImage(player.getSprite(), playerPosPixelX, playerPosPixelY, this);
     }
 
@@ -106,6 +105,27 @@ public class GamePanel extends JPanel implements KeyListener{
         }
     }
 
+    private void jumpPlayer() {
+        if (player.isJumping()) return;
+
+        Timer timer = new Timer(16, e -> {
+            if (player.getHeight() < 32 && !player.isJumping()) {
+                player.addHeight(6);
+                repaint();
+                if (player.getHeight() >= 32)
+                    player.swapJumping();
+            } else if(player.getHeight() > 0 && player.isJumping()) {
+                player.addHeight(-6);
+                repaint();
+            }
+            if (player.getHeight() <= 0){
+                ((Timer) e.getSource()).stop();
+                player.swapJumping();
+            }
+        });
+        timer.start();
+    }
+
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
@@ -128,6 +148,9 @@ public class GamePanel extends JPanel implements KeyListener{
             case KeyEvent.VK_S:
                 player.setStatus(Status.DOWN);
                 movePlayer(0, 1); // Déplacement vers le bas
+                break;
+            case KeyEvent.VK_SPACE:
+                jumpPlayer(); // Déplacement à gauche
                 break;
         }
     }

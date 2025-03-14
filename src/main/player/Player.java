@@ -11,6 +11,8 @@ public class Player {
     private int item;
     private Status status;
     private int frame;
+    private int height;
+    private boolean jump;
 
     public Player(int x, int y) {
         this.isMoving = false;
@@ -21,6 +23,8 @@ public class Player {
         this.assets = new PlayerAssets();
         this.status = Status.DOWN;
         this.frame = 1;
+        this.height = 0;
+        this.jump = false;
     }
 
     public double getX() {
@@ -70,4 +74,17 @@ public class Player {
             frame = 1;
         }
     }
+
+    public void addHeight(int height) {
+        this.height = this.height + height;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public boolean isJumping() {
+        return jump;
+    }
+    public void swapJumping() { jump = !jump; }
 }
